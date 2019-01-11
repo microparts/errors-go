@@ -2,7 +2,7 @@ package errors
 
 import (
 	"github.com/sirupsen/logrus"
-	"gitlab.teamc.io/teamc.io/microservice/support/logs-go"
+	"gitlab.teamc.io/teamc.io/microservice/support/logs-go.git"
 	"reflect"
 	"strings"
 	"sync"

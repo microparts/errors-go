@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"github.com/sirupsen/logrus"
-	"gitlab.teamc.io/teamc.io/microservice/support/logs-go"
+	"gitlab.teamc.io/teamc.io/microservice/support/logs-go.git"
 	"gopkg.in/go-playground/validator.v9"
 	"net/http"
 )
