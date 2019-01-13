@@ -2,7 +2,6 @@ package errors
 
 import (
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"gitlab.teamc.io/teamc.io/microservice/support/logs-go.git"
 	"reflect"
 	"strings"
@@ -29,7 +28,7 @@ var (
 
 func InitValidator() {
 	binding.Validator = new(defaultValidator)
-	logs.Log.WithFields(logrus.Fields{"service": "router", "stage": "init"}).Info("Validator initiated")
+	logs.RouterInitLogs.Info("Validator initiated")
 }
 
 func (v *defaultValidator) ValidateStruct(obj interface{}) error {
