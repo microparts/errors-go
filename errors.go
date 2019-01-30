@@ -20,6 +20,10 @@ var (
 	RecordNotFound       = errors.New("record not found")
 )
 
+func New(msg string) error {
+	return errors.New(msg)
+}
+
 func HasErrors(err interface{}) bool {
 	hasErrors := false
 	switch e := err.(type) {
