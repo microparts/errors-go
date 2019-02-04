@@ -26,16 +26,13 @@
 
 
 [[constraint]]
-  name = "github.com/jinzhu/gorm"
-  version = "1.9.2"
-
-[[constraint]]
-  name = "github.com/pkg/errors"
-  version = "0.8.0"
-
-[[constraint]]
   name = "gopkg.in/go-playground/validator.v9"
-  version = "9.24.0"
+  version = "~9.24"
+
+
+[[constraint]]
+  name = "gitlab.teamc.io/teamc.io/microservice/support/logs-go.git"
+  version = "~v0.1.0"
 
 [prune]
   go-tests = true

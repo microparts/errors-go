@@ -31,19 +31,11 @@ func HasErrors(err interface{}) bool {
 		hasErrors = len(e) > 0
 	case []error:
 		hasErrors = len(e) > 0
+	case map[string]error:
+		hasErrors = len(e) > 0
 	default:
 		hasErrors = e != nil
 	}
 
 	return hasErrors
-}
-
-// Извлечение ошибок из gorm запросов (для update|delete)
-func GetResultErrors(result *gorm.DB) []error {
-	err := result.GetErrors()
-	affected := result.RowsAffected
-	if affected == 0 {
-		err = append(err, NoRowsAffected)
-	}
-	return err
 }

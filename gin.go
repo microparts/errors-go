@@ -1,29 +1,34 @@
 package errors
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"github.com/sirupsen/logrus"
 	"gitlab.teamc.io/teamc.io/microservice/support/logs-go.git"
 	"gopkg.in/go-playground/validator.v9"
-	"net/http"
 )
 
 type ResponseObject struct {
-	Error ErrorObject `json:"error"`
+	Error ErrorObject `json:"error,omitempty"`
 }
 
 type ErrorObject struct {
-	Message    string              `json:"message"`
+	Message    interface{}         `json:"message"`
 	Code       int                 `json:"code,omitempty"`
 	Validation map[string][]string `json:"validation,omitempty"`
 	Debug      string              `json:"debug,omitempty"`
 }
 
 func Response(c *gin.Context, err interface{}) {
-	var (
-		jsonObj *ResponseObject
-	)
+	errCode, data := MakeResponse(err)
+	resp := ResponseObject{Error: *data}
+	c.AbortWithStatusJSON(errCode, resp)
+}
+
+func MakeResponse(err interface{}) (int, *ErrorObject) {
+	errObj := &ErrorObject{}
 	errCode := http.StatusBadRequest
 
 	switch et := err.(type) {
@@ -34,19 +39,15 @@ func Response(c *gin.Context, err interface{}) {
 			errCode = http.StatusBadRequest
 		}
 
-		jsonObj = &ResponseObject{Error: ErrorObject{
-			Message: et.Error(),
-		}}
+		errObj.Message = et.Error()
 
 		logs.DBLogs.WithError(et).WithField("stage", "query").Error("Query error occurred")
 
 	case validator.ValidationErrors:
 		errCode = http.StatusUnprocessableEntity
 
-		jsonObj = &ResponseObject{Error: ErrorObject{
-			Message:    "Ошибка валидации",
-			Validation: MakeErrorsSlice(et),
-		}}
+		errObj.Message = "Ошибка валидации"
+		errObj.Validation = MakeErrorsSlice(et)
 
 		logs.HttpLogs.
 			WithError(et).
@@ -58,7 +59,7 @@ func Response(c *gin.Context, err interface{}) {
 	case error:
 		errCode = getErrCode(et)
 
-		jsonObj = &ResponseObject{Error: ErrorObject{Message: et.Error()}}
+		errObj.Message = et.Error()
 
 		logs.Log.
 			WithError(et).
@@ -66,9 +67,22 @@ func Response(c *gin.Context, err interface{}) {
 				"message": et.Error(),
 			}).
 			Warn("error occurred")
+	case map[string]error:
+		msgs := make(map[string]string)
+		for k, e := range et {
+			msgs[k] = e.Error()
+		}
+
+		errObj.Message = msgs
+
+		logs.Log.
+			WithFields(logrus.Fields{
+				"errors": msgs,
+			}).
+			Warn("error occurred")
 	}
 
-	c.AbortWithStatusJSON(errCode, jsonObj)
+	return errCode, errObj
 }
 
 func getErrCode(et error) (errCode int) {
