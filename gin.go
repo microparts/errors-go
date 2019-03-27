@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+	"github.com/microparts/logs-go"
 	"github.com/sirupsen/logrus"
-	"gitlab.teamc.io/teamc.io/microservice/support/logs-go.git"
 	"gopkg.in/go-playground/validator.v9"
 )
 

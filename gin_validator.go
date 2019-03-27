@@ -2,12 +2,12 @@ package errors
 
 import (
 	"fmt"
-	"gitlab.teamc.io/teamc.io/microservice/support/logs-go.git"
 	"reflect"
 	"strings"
 	"sync"
 
 	"github.com/gin-gonic/gin/binding"
+	"github.com/microparts/logs-go"
 	"gopkg.in/go-playground/validator.v9"
 )
 
