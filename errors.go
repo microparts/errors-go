@@ -1,34 +1,25 @@
 package errors
 
 import (
-	"github.com/jinzhu/gorm"
+	"fmt"
+
 	"github.com/pkg/errors"
 )
 
-const (
-	NilErrorCode     = 0
-	UnknownErrorCode = -1
-	ek               = "common"
-)
-
-var (
-	NotFound             = errors.New("Route not found")
-	NoMethod             = errors.New("Method not allowed")
-	ServerError          = errors.New("Internal server error")
-	NoDataInRequestError = errors.New("No data in requests")
-	NoRowsAffected       = errors.New("No rows affected")
-	RecordNotFound       = errors.New("record not found")
-)
-
+//New returns new error with passed message
 func New(msg string) error {
 	return errors.New(msg)
 }
 
+//Newf returns new error with message sprintf'ed by format with passed params
+func Newf(format string, params ...interface{}) error {
+	return New(fmt.Sprintf(format, params...))
+}
+
+//HasErrors checks if error occurs in passed err
 func HasErrors(err interface{}) bool {
 	hasErrors := false
 	switch e := err.(type) {
-	case gorm.Errors:
-		hasErrors = len(e) > 0
 	case []error:
 		hasErrors = len(e) > 0
 	case map[string]error:
