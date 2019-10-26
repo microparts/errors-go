@@ -1,9 +1,8 @@
 package errors
 
 import (
+	"errors"
 	"fmt"
-
-	"github.com/pkg/errors"
 )
 
 //New returns new error with passed message
@@ -13,7 +12,7 @@ func New(msg string) error {
 
 //Newf returns new error with message sprintf'ed by format with passed params
 func Newf(format string, params ...interface{}) error {
-	return New(fmt.Sprintf(format, params...))
+	return fmt.Errorf(format, params...)
 }
 
 //HasErrors checks if error occurs in passed err
