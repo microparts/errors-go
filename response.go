@@ -7,7 +7,7 @@ type ErrorType string
 type DebugData interface{}
 
 type Response struct {
-	Error ErrorObject `json:"error,omitempty"`
+	Error ErrorObject `json:"error"`
 }
 
 const (
