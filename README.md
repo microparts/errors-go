@@ -1,3 +1,7 @@
+This package moved to https://github.com/spacetab-io/errors-go
+
+-----------------
+
 errors-go
 --------
 
